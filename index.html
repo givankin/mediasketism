@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title></title>
+	<style>
+		body {
+            padding: 0;
+			text-align: center;
+			font-size: 112px;
+			font-family: Helvetica, Arial, sans-serif;
+			color: #fff;
+			background: #fff;
+			text-shadow: 0 0 5px rgba(0,0,0,.5);
+            overflow-x: hidden;
+            -webkit-transition: font-size 0.3s ease-out;  /* Safari 3.2+, Chrome */
+            -moz-transition: font-size 0.3s ease-out;  /* Firefox 4-15 */
+            -o-transition: font-size 0.3s ease-out;  /* Opera 10.5–12.00 */
+            transition: font-size 0.3s ease-out;  /* Firefox 16+, Opera 12.50+ */
+		}
+		#time {
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            margin-top: -1.1em;
+            line-height: 1;
+            cursor: default;
+            transition: visibility 0s linear 0.1s, opacity 0.1s linear;
+		}
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .visible {
+            opacity: 1;
+            visibility: visible;
+            transition-delay: 0s !important;
+        }
+        /*@media (min-width : 1200px) {
+            body { font-size: 112px; }
+        }
+        @media (min-width: 768px) and (max-width: 979px) {
+            body { font-size: 112px;}
+        }
+        @media (max-width: 767px) {
+            body { font-size: 112px;}
+        }*/
+        @media (max-width: 550px) {
+            body { font-size: 80px; }
+        }
+        @media (max-width: 320px) {
+            body { font-size: 50px; }
+        }
+    </style>
+</head>
+<body>
+<div id="time" class="hidden">
+    <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">000</span>
+</div>
+<script>
+	var $time = document.getElementById('time'), 
+		$hours = document.getElementById('hours'),
+		$minutes = document.getElementById('minutes'),
+		$seconds = document.getElementById('seconds'),
+        timeRan = 0,
+        running = false,
+        startTime
+    
+	function pause() {
+		var pauseTime = +(new Date),
+            timeRanDate
+
+        running = false
+
+        timeRan = timeRan + (pauseTime - startTime)
+
+		timeRanDate = new Date(timeRan)
+
+		$hours.innerHTML = timeRanDate.getUTCHours()
+		$minutes.innerHTML = pad(timeRanDate.getMinutes(), 2)
+		$seconds.innerHTML = pad(timeRanDate.getSeconds(), 2)
+
+		$time.className = 'visible'
+	}
+
+	function run() {
+		startTime = +(new Date)
+		running = true
+		$time.className = 'hidden';
+	}
+    
+    function toggle() {
+        running ? pause() : run()
+    }
+
+    function pad(num, numSymbols) {
+        num = '' + num
+        while(num.length < numSymbols) {
+            num = '0' + num
+        }
+        return num
+    }
+    
+    if (document.addEventListener) {
+        document.addEventListener('click', toggle);
+    } else {
+        document.attachEvent('onclick', toggle);
+    }
+    
+    run()
+    
+</script>
+</body>
+</html>
